@@ -1,4 +1,5 @@
 name: CI Workflow
+
 on:
   push:
   pull_request:
@@ -8,9 +9,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: ./runme.sh
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-artifact
-          path: artifact_*.txt
+      - name: Run build script
+        run: ./runme.sh
