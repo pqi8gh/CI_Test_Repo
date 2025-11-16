@@ -10,8 +10,15 @@ else
     TOOL="Unknown CI"
 fi
 
-# Set timezone to Pacific Time and format as "MM/DD/YYYY hh:mm:ss AM/PM PDT"
-BUILD_TIME=$(TZ=America/Los_Angeles date +"%m/%d/%Y %I:%M:%S %p %Z")
+# Get UTC time in seconds
+UTC_SECONDS=$(date -u +%s)
+
+# Convert UTC to Pacific Time by subtracting 7 hours (25200 seconds)
+# Note: This will be PDT (Daylight), for PST adjust as needed
+PT_SECONDS=$((UTC_SECONDS - 25200))
+
+# Format Pacific Time as MM/DD/YYYY hh:mm:ss AM/PM
+BUILD_TIME=$(date -d "@$PT_SECONDS" +"%m/%d/%Y %I:%M:%S %p PDT")
 
 echo "Build successful!"
 echo "Build Tool: $TOOL"
