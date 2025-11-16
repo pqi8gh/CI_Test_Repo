@@ -1,7 +1,6 @@
 #!/bin/bash
 set -e
 
-# Detect CI tool
 if [ "$GITHUB_ACTIONS" = "true" ]; then
     TOOL="GitHub Actions"
 elif [ "$CIRCLECI" = "true" ]; then
@@ -12,12 +11,15 @@ else
     TOOL="Unknown CI"
 fi
 
-# Current UTC time
-BUILD_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+# Get timestamp in safe filename format: YYYYMMDDTHHMMSSZ
+BUILD_TIME=$(date -u +"%Y%m%dT%H%M%SZ")
 
-# Output to artifact
-echo "CI build successful" > result.txt
-echo "Build Time: $BUILD_TIME" >> result.txt
-echo "Build Tool: $TOOL" >> result.txt
+# Compose artifact filename
+ARTIFACT_NAME="artifact_${BUILD_TIME}.txt"
 
-echo "Build done. Artifact is result.txt"
+# Write artifact to repo root
+echo "CI build successful" > "$ARTIFACT_NAME"
+echo "Build Time: $BUILD_TIME" >> "$ARTIFACT_NAME"
+echo "Build Tool: $TOOL" >> "$ARTIFACT_NAME"
+
+echo "Build done. Artifact is $ARTIFACT_NAME"
